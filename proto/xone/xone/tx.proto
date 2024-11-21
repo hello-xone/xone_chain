@@ -1,0 +1,7 @@
+syntax = "proto3";
+package xone.xone;
+
+option go_package = "github.com/huione-labs/xone/x/xone/types";
+
+// Msg defines the Msg service.
+service Msg {}
