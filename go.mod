@@ -31,7 +31,7 @@ require (
 )
 
 replace (
-	github.com/cometbft/cometbft => github.com/xone-ddd/cometbft v1.0.0
+	github.com/cometbft/cometbft => github.com/xone-ddd/cometbft v1.0.1
 	// use cosmos fork of keyring
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 	// use Cosmos-SDK fork to enable Ledger functionality
