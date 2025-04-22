@@ -8,7 +8,7 @@ DOCKER := $(shell which docker)
 
 build:
 	go mod tidy \
-	&& go build -ldflags "-s -w -X 'main.BuildTime=${DATE_TIME}' -X 'main.GitCommit=${COMMIT_ID}'" -o xoned cmd/xoned/main.go
+	&& go build -ldflags "-s -w -X 'main.BuildTime=${DATE_TIME}' -X 'main.Version=${TAG}' -X 'main.GitCommit=${COMMIT_ID}'" -o xoned cmd/xoned/main.go
 .PHONY: build
 BINS+=xoned
 

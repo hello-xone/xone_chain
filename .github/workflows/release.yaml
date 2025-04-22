@@ -1,0 +1,40 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # 匹配所有以 v 开头的 tag
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write  # 允许写入 release 内容
+
+    steps:
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+            # 2. 构建可执行文件
+      - name: Build executable
+        run: make build  # 在项目根目录执行构建
+
+      - name: Rename executable
+        run: |
+          cp xoned xoned-${{ github.ref_name }}-linux-amd64
+
+      # 3. 上传到 Release
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |          # 要上传的文件路径
+            xoned-${{ github.ref_name }}-linux-amd64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 自动生成的 token
+
+      - name: Create Docker
+        run: |
+          docker build -t xonechain/xoned:${{ github.ref_name }} .
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push xonechain/xoned:${{ github.ref_name }}

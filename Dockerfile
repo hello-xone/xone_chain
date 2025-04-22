@@ -1,18 +1,6 @@
-FROM golang:1.21 AS builder
-
-ENV SRC_DIR /code
-COPY . $SRC_DIR
-
-RUN go env -w GOPROXY=https://proxy.golang.org,direct
-RUN apt-get update && apt-get install -y ca-certificates make build-essential
-RUN cd $SRC_DIR && make
-
 FROM ubuntu:22.04
 
-ENV SRC_DIR /code
-
-COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder $SRC_DIR/xoned /usr/local/bin/xoned
+COPY ./xoned /usr/local/bin/xoned
 
 ENV HOME_PATH /data
 VOLUME $HOME_PATH

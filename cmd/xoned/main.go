@@ -13,11 +13,8 @@ import (
 	"github.com/hello-xone/xone-chain/cmd/xoned/cmd"
 )
 
-const (
-	Version = "v0.2.0"
-)
-
 var (
+	Version   = "v0.2.0"
 	BuildTime = ""
 	GitCommit = ""
 )
