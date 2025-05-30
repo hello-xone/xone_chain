@@ -1,0 +1,12 @@
+syntax = "proto3";
+package xone.xone;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/hello-xone/xone-chain/x/xone/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+}

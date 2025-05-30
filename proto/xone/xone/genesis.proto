@@ -1,0 +1,12 @@
+syntax = "proto3";
+package xone.xone;
+
+import "gogoproto/gogo.proto";
+import "xone/xone/params.proto";
+
+option go_package = "github.com/hello-xone/xone-chain/x/xone/types";
+
+// GenesisState defines the xone module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+}
