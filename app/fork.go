@@ -3,7 +3,7 @@ package app
 import (
 	"time"
 
-	epochsmoduletypes "github.com/evmos/evmos/v16/x/epochs/types"
+	epochsmoduletypes "github.com/evmos/evmos/v17/x/epochs/types"
 )
 
 const (

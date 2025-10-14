@@ -13,10 +13,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/evmos/evmos/v16/types"
-	"github.com/evmos/evmos/v16/x/evm/keeper"
-	"github.com/evmos/evmos/v16/x/evm/statedb"
-	evmtypes "github.com/evmos/evmos/v16/x/evm/types"
+	"github.com/evmos/evmos/v17/types"
+	"github.com/evmos/evmos/v17/x/evm/keeper"
+	"github.com/evmos/evmos/v17/x/evm/statedb"
+	evmtypes "github.com/evmos/evmos/v17/x/evm/types"
 	anteutils "github.com/hello-xone/xone-chain/app/ante/utils"
 
 	"github.com/ethereum/go-ethereum/common"

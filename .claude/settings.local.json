@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(go doc:*)",
+      "Bash(make:*)",
+      "Bash(./xoned version)",
+      "Bash(timeout:*)",
+      "Bash(./xoned:*)",
+      "Bash(strace:*)",
+      "Bash(git restore:*)",
+      "Bash(go mod:*)",
+      "Bash(find:*)",
+      "Bash(go list:*)",
+      "Bash(git ls-remote:*)",
+      "Bash(curl -s https://raw.githubusercontent.com/xone-ddd/evmos17/v0.2.0/go.mod)",
+      "Bash(GOMOD WORK=off go mod edit:*)",
+      "Bash(go clean:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

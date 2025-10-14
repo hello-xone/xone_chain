@@ -13,10 +13,10 @@ import (
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 
-	"github.com/evmos/evmos/v16/crypto/ethsecp256k1"
-	"github.com/evmos/evmos/v16/encoding"
-	testutil "github.com/evmos/evmos/v16/testutil"
-	testutiltx "github.com/evmos/evmos/v16/testutil/tx"
+	"github.com/evmos/evmos/v17/crypto/ethsecp256k1"
+	"github.com/evmos/evmos/v17/encoding"
+	testutil "github.com/evmos/evmos/v17/testutil"
+	testutiltx "github.com/evmos/evmos/v17/testutil/tx"
 	"github.com/hello-xone/xone-chain/app"
 	cosmosante "github.com/hello-xone/xone-chain/app/ante/cosmos"
 )

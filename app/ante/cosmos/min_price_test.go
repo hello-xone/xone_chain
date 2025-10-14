@@ -4,9 +4,9 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/evmos/evmos/v16/testutil"
-	testutiltx "github.com/evmos/evmos/v16/testutil/tx"
-	"github.com/evmos/evmos/v16/utils"
+	"github.com/evmos/evmos/v17/testutil"
+	testutiltx "github.com/evmos/evmos/v17/testutil/tx"
+	"github.com/evmos/evmos/v17/utils"
 	cosmosante "github.com/hello-xone/xone-chain/app/ante/cosmos"
 )
 

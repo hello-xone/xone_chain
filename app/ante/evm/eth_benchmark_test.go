@@ -8,11 +8,11 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/evmos/evmos/v16/server/config"
-	"github.com/evmos/evmos/v16/testutil"
-	testutiltx "github.com/evmos/evmos/v16/testutil/tx"
-	"github.com/evmos/evmos/v16/x/evm/statedb"
-	evmtypes "github.com/evmos/evmos/v16/x/evm/types"
+	"github.com/evmos/evmos/v17/server/config"
+	"github.com/evmos/evmos/v17/testutil"
+	testutiltx "github.com/evmos/evmos/v17/testutil/tx"
+	"github.com/evmos/evmos/v17/x/evm/statedb"
+	evmtypes "github.com/evmos/evmos/v17/x/evm/types"
 	ethante "github.com/hello-xone/xone-chain/app/ante/evm"
 )
 
