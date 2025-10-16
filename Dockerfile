@@ -1,4 +1,4 @@
-FROM golang:1.21 AS builder
+FROM golang:1.22 AS builder
 
 ENV SRC_DIR /code
 COPY . $SRC_DIR
