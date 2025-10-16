@@ -38,7 +38,7 @@ replace (
 	// use Evmos geth fork
 	github.com/ethereum/go-ethereum => github.com/hello-xone/xone_go-ethereum v1.0.1
 	// use Evmos evmos fork
-	github.com/evmos/evmos/v17 => github.com/xone-ddd/evmos17/v17 v17.0.0
+	github.com/evmos/evmos/v17 => github.com/hello-xone/evmos/v17 v17.0.1-0.20251014041545-2e79c56bf790
 
 	// Security Advisory https://github.com/advisories/GHSA-h395-qcrw-5vmq
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
