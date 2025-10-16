@@ -2,7 +2,7 @@ package cmd
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	evmostypes "github.com/evmos/evmos/v16/types"
+	evmostypes "github.com/evmos/evmos/v17/types"
 	"github.com/hello-xone/xone-chain/app"
 )
 
