@@ -4,11 +4,12 @@ CLEAN:=
 BINS:=
 DATE_TIME=`date +'%Y%m%d %H:%M:%S'`
 COMMIT_ID=`git rev-parse --short HEAD`
+TAG_ID=`git describe --tags --abbrev=0`
 DOCKER := $(shell which docker)
 
 build:
 	go mod tidy \
-	&& go build -ldflags "-s -w -X 'main.BuildTime=${DATE_TIME}' -X 'main.GitCommit=${COMMIT_ID}'" -o xoned cmd/xoned/main.go
+	&& go build -ldflags "-s -w -X 'main.BuildTime=${DATE_TIME}' -X 'main.GitCommit=${COMMIT_ID}' -X 'main.Version=${TAG_ID}'" -o xoned cmd/xoned/main.go
 .PHONY: build
 BINS+=xoned
 
