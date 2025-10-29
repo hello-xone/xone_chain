@@ -859,11 +859,28 @@ func (app *App) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
 func (app *App) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
-	app.forkBlocker(ctx)
+	app.forkBeginBlocker(ctx)
 	return app.mm.BeginBlock(ctx, req)
 }
 
-func (app *App) forkBlocker(ctx sdk.Context) {
+func (app *App) forkBeginBlocker(ctx sdk.Context) {
+	chainId, err := evmostypes.ParseChainID(ctx.ChainID())
+	if err != nil {
+		ctx.Logger().Error("Get consensus params failed", "err", err)
+	} else {
+		if chainId.Int64() == evmostypes.EvmChainID_Mainnet {
+			if ctx.BlockHeight() == ForkAddEpochsMainNetHeight {
+				app.forkAddEpochs(ctx, ForkMainNetEpochInfo)
+			}
+		}
+		if chainId.Int64() == evmostypes.EvmChainID_Testnet {
+			if ctx.BlockHeight() == ForkAddEpochsTestNetHeight {
+				app.forkAddEpochs(ctx, ForkTestNetEpochInfo)
+			}
+		}
+	}
+}
+func (app *App) forkEndBlocker(ctx sdk.Context) {
 	chainId, err := evmostypes.ParseChainID(ctx.ChainID())
 	if err != nil {
 		ctx.Logger().Error("Get consensus params failed", "err", err)
@@ -872,18 +889,10 @@ func (app *App) forkBlocker(ctx sdk.Context) {
 			if ctx.BlockHeight() == ForkGasLimitMainNetHeight {
 				app.forkGaslimit(ctx)
 			}
-
-			if ctx.BlockHeight() == ForkAddEpochsMainNetHeight {
-				app.forkAddEpochs(ctx, ForkMainNetEpochInfo)
-			}
 		}
 		if chainId.Int64() == evmostypes.EvmChainID_Testnet {
 			if ctx.BlockHeight() == ForkGasLimitTestNetHeight {
 				app.forkGaslimit(ctx)
-			}
-
-			if ctx.BlockHeight() == ForkAddEpochsTestNetHeight {
-				app.forkAddEpochs(ctx, ForkTestNetEpochInfo)
 			}
 		}
 	}
@@ -894,7 +903,7 @@ func (app *App) forkGaslimit(ctx sdk.Context) {
 	if err != nil {
 		ctx.Logger().Error("Get consensus params failed", "err", err)
 	} else {
-		cc.Block.MaxGas = 20000000
+		cc.Block.MaxGas = 30000000
 		app.ConsensusParamsKeeper.Set(ctx, cc)
 		ctx.Logger().Info("update consensus params", "maxGas", cc.Block.MaxGas)
 	}
@@ -942,6 +951,7 @@ func (app *App) setUpgradeStoreLoader() {
 
 // EndBlocker application updates every end block
 func (app *App) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
+	app.forkEndBlocker(ctx)
 	return app.mm.EndBlock(ctx, req)
 }
 
