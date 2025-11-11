@@ -89,7 +89,6 @@ import (
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
@@ -114,10 +113,11 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v7/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
-	"github.com/evmos/evmos/v17/x/ibc/transfer"
-	transferkeeper "github.com/evmos/evmos/v17/x/ibc/transfer/keeper"
-	vestingkeeper "github.com/evmos/evmos/v17/x/vesting/keeper"
-	vestingtypes "github.com/evmos/evmos/v17/x/vesting/types"
+	"github.com/evmos/evmos/v18/x/ibc/transfer"
+	transferkeeper "github.com/evmos/evmos/v18/x/ibc/transfer/keeper"
+	stakingkeeper "github.com/evmos/evmos/v18/x/staking/keeper"
+	vestingkeeper "github.com/evmos/evmos/v18/x/vesting/keeper"
+	vestingtypes "github.com/evmos/evmos/v18/x/vesting/types"
 	"github.com/hello-xone/xone-chain/app/ante"
 
 	"github.com/spf13/cast"
@@ -130,20 +130,20 @@ import (
 
 	//appparams "github.com/hello-xone/xone-chain/app/params"
 	simappparams "cosmossdk.io/simapp/params"
-	srvflags "github.com/evmos/evmos/v17/server/flags"
-	evmostypes "github.com/evmos/evmos/v17/types"
-	epochsmodule "github.com/evmos/evmos/v17/x/epochs"
-	epochsmodulekeeper "github.com/evmos/evmos/v17/x/epochs/keeper"
-	epochsmoduletypes "github.com/evmos/evmos/v17/x/epochs/types"
-	"github.com/evmos/evmos/v17/x/erc20"
-	erc20keeper "github.com/evmos/evmos/v17/x/erc20/keeper"
-	erc20types "github.com/evmos/evmos/v17/x/erc20/types"
-	"github.com/evmos/evmos/v17/x/evm"
-	evmkeeper "github.com/evmos/evmos/v17/x/evm/keeper"
-	evmtypes "github.com/evmos/evmos/v17/x/evm/types"
-	"github.com/evmos/evmos/v17/x/feemarket"
-	feemarketkeeper "github.com/evmos/evmos/v17/x/feemarket/keeper"
-	feemarkettypes "github.com/evmos/evmos/v17/x/feemarket/types"
+	srvflags "github.com/evmos/evmos/v18/server/flags"
+	evmostypes "github.com/evmos/evmos/v18/types"
+	epochsmodule "github.com/evmos/evmos/v18/x/epochs"
+	epochsmodulekeeper "github.com/evmos/evmos/v18/x/epochs/keeper"
+	epochsmoduletypes "github.com/evmos/evmos/v18/x/epochs/types"
+	"github.com/evmos/evmos/v18/x/erc20"
+	erc20keeper "github.com/evmos/evmos/v18/x/erc20/keeper"
+	erc20types "github.com/evmos/evmos/v18/x/erc20/types"
+	"github.com/evmos/evmos/v18/x/evm"
+	evmkeeper "github.com/evmos/evmos/v18/x/evm/keeper"
+	evmtypes "github.com/evmos/evmos/v18/x/evm/types"
+	"github.com/evmos/evmos/v18/x/feemarket"
+	feemarketkeeper "github.com/evmos/evmos/v18/x/feemarket/keeper"
+	feemarkettypes "github.com/evmos/evmos/v18/x/feemarket/types"
 	"github.com/hello-xone/xone-chain/docs"
 )
 
@@ -1357,7 +1357,7 @@ func (app *App) newModuleManager(appCodec codec.Codec, encodingConfig simapppara
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper, nil, app.GetSubspace(minttypes.ModuleName)),
 		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(slashingtypes.ModuleName)),
 		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper, app.GetSubspace(distrtypes.ModuleName)),
-		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName)),
+		staking.NewAppModule(appCodec, app.StakingKeeper.Keeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName)),
 		upgrade.NewAppModule(app.UpgradeKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),

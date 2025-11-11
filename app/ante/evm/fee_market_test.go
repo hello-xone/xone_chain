@@ -8,11 +8,11 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
-	"github.com/evmos/evmos/v17/testutil"
-	utiltx "github.com/evmos/evmos/v17/testutil/tx"
-	"github.com/evmos/evmos/v17/types"
-	"github.com/evmos/evmos/v17/utils"
-	evmtypes "github.com/evmos/evmos/v17/x/evm/types"
+	"github.com/evmos/evmos/v18/testutil"
+	utiltx "github.com/evmos/evmos/v18/testutil/tx"
+	"github.com/evmos/evmos/v18/types"
+	"github.com/evmos/evmos/v18/utils"
+	evmtypes "github.com/evmos/evmos/v18/x/evm/types"
 	"github.com/hello-xone/xone-chain/app/ante/evm"
 )
 

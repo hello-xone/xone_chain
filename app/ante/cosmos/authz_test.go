@@ -17,9 +17,9 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	testutil "github.com/evmos/evmos/v17/testutil"
-	utiltx "github.com/evmos/evmos/v17/testutil/tx"
-	evmtypes "github.com/evmos/evmos/v17/x/evm/types"
+	testutil "github.com/evmos/evmos/v18/testutil"
+	utiltx "github.com/evmos/evmos/v18/testutil/tx"
+	evmtypes "github.com/evmos/evmos/v18/x/evm/types"
 	cosmosante "github.com/hello-xone/xone-chain/app/ante/cosmos"
 )
 

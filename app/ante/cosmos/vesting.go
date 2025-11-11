@@ -9,8 +9,8 @@ import (
 	errortypes "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	evmtypes "github.com/evmos/evmos/v17/x/evm/types"
-	vestingtypes "github.com/evmos/evmos/v17/x/vesting/types"
+	evmtypes "github.com/evmos/evmos/v18/x/evm/types"
+	vestingtypes "github.com/evmos/evmos/v18/x/vesting/types"
 )
 
 // TODO: remove once Cosmos SDK is upgraded to v0.46
@@ -94,7 +94,7 @@ func (vdd VestingDelegationDecorator) validateMsg(ctx sdk.Context, msg sdk.Msg) 
 
 		// error if bond amount is > vested coins
 		bondDenom := vdd.sk.BondDenom(ctx)
-		coins := clawbackAccount.GetVestedOnly(ctx.BlockTime())
+		coins := clawbackAccount.GetVestedCoins(ctx.BlockTime())
 		if coins == nil || coins.Empty() {
 			return errorsmod.Wrap(
 				vestingtypes.ErrInsufficientVestedCoins,
@@ -103,7 +103,7 @@ func (vdd VestingDelegationDecorator) validateMsg(ctx sdk.Context, msg sdk.Msg) 
 		}
 
 		balance := vdd.bk.GetBalance(ctx, addr, bondDenom)
-		unvestedOnly := clawbackAccount.GetUnvestedOnly(ctx.BlockTime())
+		unvestedOnly := clawbackAccount.GetVestingCoins(ctx.BlockTime())
 		spendable, hasNeg := sdk.Coins{balance}.SafeSub(unvestedOnly...)
 		if hasNeg {
 			spendable = sdk.NewCoins()
