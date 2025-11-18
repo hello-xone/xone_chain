@@ -13,7 +13,7 @@ require (
 	github.com/cosmos/gogoproto v1.4.10
 	github.com/cosmos/ibc-go/v7 v7.4.0
 	github.com/ethereum/go-ethereum v1.11.5
-	github.com/evmos/evmos/v17 v17.0.0
+	github.com/evmos/evmos/v18 v18.1.0
 	github.com/golang/protobuf v1.5.3
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
@@ -38,7 +38,7 @@ replace (
 	// use Evmos geth fork
 	github.com/ethereum/go-ethereum => github.com/hello-xone/xone_go-ethereum v1.0.1
 	// use Evmos evmos fork
-	github.com/evmos/evmos/v17 => github.com/hello-xone/evmos/v17 v17.0.1-0.20251014041545-2e79c56bf790
+	github.com/evmos/evmos/v18 => github.com/hello-xone/evmos/v18 v18.1.1-0.20251111044338-e354ca5ca79f
 
 	// Security Advisory https://github.com/advisories/GHSA-h395-qcrw-5vmq
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1

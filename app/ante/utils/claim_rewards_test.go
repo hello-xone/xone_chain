@@ -4,9 +4,9 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/evmos/evmos/v17/testutil"
-	testutiltx "github.com/evmos/evmos/v17/testutil/tx"
-	"github.com/evmos/evmos/v17/utils"
+	"github.com/evmos/evmos/v18/testutil"
+	testutiltx "github.com/evmos/evmos/v18/testutil/tx"
+	"github.com/evmos/evmos/v18/utils"
 	anteutils "github.com/hello-xone/xone-chain/app/ante/utils"
 )
 

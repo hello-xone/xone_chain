@@ -1,8 +1,8 @@
 package ante_test
 
 import (
-	"github.com/evmos/evmos/v17/encoding"
-	"github.com/evmos/evmos/v17/types"
+	"github.com/evmos/evmos/v18/encoding"
+	"github.com/evmos/evmos/v18/types"
 	ethante "github.com/hello-xone/xone-chain/app/ante/evm"
 
 	"github.com/hello-xone/xone-chain/app"

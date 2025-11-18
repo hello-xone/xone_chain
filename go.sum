@@ -746,8 +746,8 @@ github.com/hashicorp/memberlist v0.1.3/go.mod h1:ajVTdAv/9Im8oMAAj5G31PhhMCZJV2p
 github.com/hashicorp/serf v0.8.2/go.mod h1:6hOLApaqBFA1NXqRQAsxw9QxuDEvNxSQRwA/JwenrHc=
 github.com/hdevalence/ed25519consensus v0.1.0 h1:jtBwzzcHuTmFrQN6xQZn6CQEO/V9f7HsjsjeEZ6auqU=
 github.com/hdevalence/ed25519consensus v0.1.0/go.mod h1:w3BHWjwJbFU29IRHL1Iqkw3sus+7FctEyM4RqDxYNzo=
-github.com/hello-xone/evmos/v17 v17.0.1-0.20251014041545-2e79c56bf790 h1:FYglFiVuzxS6dZuuh9NtNwRvnweI8KlN7+jaMjpPRLs=
-github.com/hello-xone/evmos/v17 v17.0.1-0.20251014041545-2e79c56bf790/go.mod h1:niQ4Uz+I8WunNrc+IZTsor2jPSRtK7N90lFdII0bU1g=
+github.com/hello-xone/evmos/v18 v18.1.1-0.20251111044338-e354ca5ca79f h1:g5eE4VXLNTqg1SVUBaWEAcy53E98w+ONoSR+d9qxenU=
+github.com/hello-xone/evmos/v18 v18.1.1-0.20251111044338-e354ca5ca79f/go.mod h1:GfZd17bX4cerdRd0/LK6134akWx+Ef+MEvyaFtUrbYY=
 github.com/hello-xone/xone_cosmos-sdk v1.0.1 h1:2H0E0an215DWURkB/mOCn+ZF70P7Ay9JVrX34U0P68E=
 github.com/hello-xone/xone_cosmos-sdk v1.0.1/go.mod h1:87vJqJRUEmNTtufxdsNvwjsO2L1hnWyXCpozeuxWE6c=
 github.com/hello-xone/xone_go-ethereum v1.0.1 h1:+m6N1SwPPeJh8RSvZeLUcu8ddM2foswJXNA7ATD5ugQ=
