@@ -111,39 +111,58 @@ func (empd EthMinGasPriceDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 
 // AnteHandle ensures that the provided fees meet a minimum threshold for the validator.
 // This check only for local mempool purposes, and thus it is only run on (Re)CheckTx.
-// The logic is also skipped if the London hard fork and EIP-1559 are enabled.
+// It applies to both legacy and EIP-1559 transactions.
 func (mfd EthMempoolFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	// Only check on CheckTx, skip on DeliverTx and simulate
 	if !ctx.IsCheckTx() || simulate {
 		return next(ctx, tx, simulate)
 	}
+
 	evmParams := mfd.evmKeeper.GetParams(ctx)
 	chainCfg := evmParams.GetChainConfig()
 	ethCfg := chainCfg.EthereumConfig(mfd.evmKeeper.ChainID())
-
 	baseFee := mfd.evmKeeper.GetBaseFee(ctx, ethCfg)
-	// skip check as the London hard fork and EIP-1559 are enabled
-	if baseFee != nil {
-		return next(ctx, tx, simulate)
-	}
 
 	evmDenom := evmParams.GetEvmDenom()
 	minGasPrice := ctx.MinGasPrices().AmountOf(evmDenom)
 
+	// Skip check if minGasPrice is zero
+	if minGasPrice.IsZero() {
+		return next(ctx, tx, simulate)
+	}
+
 	for _, msg := range tx.GetMsgs() {
 		ethMsg, ok := msg.(*evmtypes.MsgEthereumTx)
 		if !ok {
-			return ctx, errorsmod.Wrapf(errortypes.ErrUnknownRequest, "invalid message type %T, expected %T", msg, (*evmtypes.MsgEthereumTx)(nil))
+			return ctx, errorsmod.Wrapf(
+				errortypes.ErrUnknownRequest,
+				"invalid message type %T, expected %T",
+				msg, (*evmtypes.MsgEthereumTx)(nil),
+			)
 		}
 
-		fee := sdk.NewDecFromBigInt(ethMsg.GetFee())
+		feeAmt := ethMsg.GetFee()
+
+		// For dynamic transactions (EIP-1559), use EffectiveFee instead of GetFee()
+		// GetFee() returns GasFeeCap which is the maximum, but actual fee paid is lower
+		txData, err := evmtypes.UnpackTxData(ethMsg.Data)
+		if err != nil {
+			return ctx, errorsmod.Wrapf(err, "failed to unpack tx data %s", ethMsg.Hash)
+		}
+
+		if txData.TxType() != ethtypes.LegacyTxType && baseFee != nil {
+			feeAmt = ethMsg.GetEffectiveFee(baseFee)
+		}
+
 		gasLimit := sdk.NewDecFromBigInt(new(big.Int).SetUint64(ethMsg.GetGas()))
+		fee := sdk.NewDecFromBigInt(feeAmt)
 		requiredFee := minGasPrice.Mul(gasLimit)
 
 		if fee.LT(requiredFee) {
 			return ctx, errorsmod.Wrapf(
 				errortypes.ErrInsufficientFee,
-				"insufficient fee; got: %s required: %s",
-				fee, requiredFee,
+				"insufficient fee; got: %s required: %s. Please increase the gas price or priority fee",
+				fee.TruncateInt().String(), requiredFee.TruncateInt().String(),
 			)
 		}
 	}
