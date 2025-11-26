@@ -122,6 +122,9 @@ import (
 	"github.com/hello-xone/xone-chain/app/ante"
 
 	"github.com/spf13/cast"
+	"golang.org/x/exp/slices"
+
+	errorsmod "cosmossdk.io/errors"
 
 	xonemodule "github.com/hello-xone/xone-chain/x/xone"
 	xonemodulekeeper "github.com/hello-xone/xone-chain/x/xone/keeper"
@@ -390,6 +393,15 @@ func New(
 		keys:              keys,
 		tkeys:             tkeys,
 		memKeys:           memKeys,
+	}
+
+	// wire up the versiondb's StreamingService and MultiStore
+	streamers := cast.ToStringSlice(appOpts.Get(streaming.OptStoreStreamers))
+	if slices.Contains(streamers, versionDB) {
+		if _, err := app.setupVersionDB(homePath, keys, tkeys, memKeys); err != nil {
+			tmos.Exit(errorsmod.Wrap(err, "error on versionDB setup").Error())
+		}
+		logger.Info("versionDB enabled")
 	}
 
 	app.ParamsKeeper = initParamsKeeper(
