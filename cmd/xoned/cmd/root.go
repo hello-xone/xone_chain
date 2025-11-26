@@ -426,5 +426,10 @@ func initAppConfigEVM() (string, interface{}) {
 	srvCfg.StateSync.SnapshotKeepRecent = 2
 	srvCfg.IAVLDisableFastNode = false
 
+	// Enable memiavl by default
+	srvCfg.MemIAVL.Enable = true
+	srvCfg.MemIAVL.ZeroCopy = true
+	srvCfg.MemIAVL.SnapshotInterval = 1000
+
 	return customAppTemplate, srvCfg
 }

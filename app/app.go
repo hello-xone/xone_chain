@@ -341,7 +341,19 @@ func New(
 	txConfig := encodingConfig.TxConfig
 
 	// setup memiavl if it's enabled in config
+	// Debug: print all memiavl related config
+	memiavlEnabled := appOpts.Get("memiavl.enable")
+	memiavlSection := appOpts.Get("memiavl")
+	logger.Info("memiavl config check",
+		"memiavl.enable", memiavlEnabled,
+		"memiavl.enable_type", fmt.Sprintf("%T", memiavlEnabled),
+		"memiavl_section", memiavlSection,
+		"memiavl_section_type", fmt.Sprintf("%T", memiavlSection),
+		"homePath", homePath,
+		"baseAppOptions_len_before", len(baseAppOptions),
+	)
 	baseAppOptions = memiavlstore.SetupMemIAVL(logger, homePath, appOpts, false, false, baseAppOptions)
+	logger.Info("memiavl setup done", "baseAppOptions_len_after", len(baseAppOptions))
 
 	bApp := baseapp.NewBaseApp(
 		Name,
