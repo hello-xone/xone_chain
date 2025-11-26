@@ -7,6 +7,19 @@ COMMIT_ID=`git rev-parse --short HEAD`
 TAG_ID=`git describe --tags --abbrev=0`
 DOCKER := $(shell which docker)
 
+build-rocksdb:
+	CGO_ENABLED=1 \
+	CGO_CFLAGS="-I/usr/include" \
+	CGO_LDFLAGS="/usr/lib/x86_64-linux-gnu/librocksdb.a \
+	/usr/lib/x86_64-linux-gnu/libsnappy.a \
+	/usr/lib/x86_64-linux-gnu/liblz4.a \
+	/usr/lib/x86_64-linux-gnu/libzstd.a \
+	/usr/lib/x86_64-linux-gnu/libbz2.a \
+	/usr/lib/x86_64-linux-gnu/libz.a \
+	-lstdc++ -lm -ldl -lpthread" \
+	go build -tags "rocksdb" \
+	-ldflags "-s -w" \
+	-o xoned cmd/xoned/main.go
 build:
 	go mod tidy \
 	&& go build -ldflags "-s -w -X 'main.BuildTime=${DATE_TIME}' -X 'main.GitCommit=${COMMIT_ID}' -X 'main.Version=${TAG_ID}'" -o xoned cmd/xoned/main.go
