@@ -45,6 +45,21 @@ start:
 docker: clean
 	docker build --tag xone-node -f ./Dockerfile .
 
+# 构建支持 RocksDB 的静态链接二进制（通过 Docker）
+docker-rocksdb:
+	docker build --tag xone-node-rocksdb \
+		--build-arg VERSION=${TAG_ID} \
+		--build-arg BUILD_TIME="${DATE_TIME}" \
+		--build-arg GIT_COMMIT=${COMMIT_ID} \
+		-f ./Dockerfile.rocksdb .
+
+# 从 Docker 镜像中提取静态链接的二进制文件
+extract-rocksdb-bin: docker-rocksdb
+	docker create --name temp-xone xone-node-rocksdb
+	docker cp temp-xone:/usr/local/bin/xoned ./xoned-rocksdb
+	docker rm temp-xone
+	@echo "Binary extracted to ./xoned-rocksdb"
+
 reset: install init start
 
 docker-test: install

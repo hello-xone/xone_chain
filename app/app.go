@@ -13,6 +13,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/streaming"
 	"github.com/cosmos/cosmos-sdk/x/auth/posthandler"
+	memiavlstore "github.com/crypto-org-chain/cronos/store"
 	porttypes "github.com/cosmos/ibc-go/v7/modules/core/05-port/types"
 
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
@@ -338,6 +339,9 @@ func New(
 	cdc := encodingConfig.Amino
 	interfaceRegistry := encodingConfig.InterfaceRegistry
 	txConfig := encodingConfig.TxConfig
+
+	// setup memiavl if it's enabled in config
+	baseAppOptions = memiavlstore.SetupMemIAVL(logger, homePath, appOpts, false, false, baseAppOptions)
 
 	bApp := baseapp.NewBaseApp(
 		Name,
