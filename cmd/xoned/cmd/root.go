@@ -358,6 +358,13 @@ func (a appCreator) appExport(
 	viperAppOpts.Set(server.FlagInvCheckPeriod, 1)
 	appOpts = viperAppOpts
 
+	// get chain-id from genesis file for SetChainID option
+	chainID := ""
+	appGenesis, err := tmtypes.GenesisDocFromFile(filepath.Join(homePath, "config", "genesis.json"))
+	if err == nil {
+		chainID = appGenesis.ChainID
+	}
+
 	app := app.New(
 		logger,
 		db,
@@ -368,6 +375,7 @@ func (a appCreator) appExport(
 		uint(1),
 		a.encodingConfig,
 		appOpts,
+		baseapp.SetChainID(chainID),
 	)
 
 	if height != -1 {
