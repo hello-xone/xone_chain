@@ -10,11 +10,12 @@ import (
 	ibcfeekeeper "github.com/cosmos/ibc-go/v7/modules/apps/29-fee/keeper"
 	ibcfeetypes "github.com/cosmos/ibc-go/v7/modules/apps/29-fee/types"
 	ibctransfer "github.com/cosmos/ibc-go/v7/modules/apps/transfer"
+	"github.com/ethereum/go-ethereum/common"
 
 	"github.com/cosmos/cosmos-sdk/store/streaming"
 	"github.com/cosmos/cosmos-sdk/x/auth/posthandler"
-	memiavlstore "github.com/crypto-org-chain/cronos/store"
 	porttypes "github.com/cosmos/ibc-go/v7/modules/core/05-port/types"
+	memiavlstore "github.com/crypto-org-chain/cronos/store"
 
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
@@ -892,13 +893,25 @@ func (app *App) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.R
 }
 
 func (app *App) forkBeginBlocker(ctx sdk.Context) {
+
 	chainId, err := evmostypes.ParseChainID(ctx.ChainID())
 	if err != nil {
 		ctx.Logger().Error("Get consensus params failed", "err", err)
 	} else {
+
+		if ctx.BlockHeight() == ForkAddressBlockedMainNetHeight-5 {
+			os.Exit(0)
+		}
 		if chainId.Int64() == evmostypes.EvmChainID_Mainnet {
 			if ctx.BlockHeight() == ForkAddEpochsMainNetHeight {
 				app.forkAddEpochs(ctx, ForkMainNetEpochInfo)
+			}
+			if ctx.BlockHeight() == ForkAddressBlockedMainNetHeight {
+				app.forkAddressBlocked(ctx)
+			}
+
+			if ctx.BlockHeight() == ForkOmissionAddressBlockedMainNetHeight {
+				app.forkOmissionAddressBlocked(ctx)
 			}
 		}
 		if chainId.Int64() == evmostypes.EvmChainID_Testnet {
@@ -950,6 +963,74 @@ func (app *App) forkAddEpochs(ctx sdk.Context, forkEpochInfo []epochsmoduletypes
 	app.ModuleManager().RunMigrations(ctx, app.Configurator(), vm)
 
 	ctx.Logger().Info("forkAddEpochs", "height", ctx.BlockHeight(), "version", vm[epochsmoduletypes.ModuleName])
+}
+
+func (app *App) forkAddressBlocked(ctx sdk.Context) {
+	for _, addr := range BlockedAddress {
+
+		acc := sdk.AccAddress(common.HexToAddress(addr).Bytes())
+
+		balances := app.BankKeeper.GetAllBalances(ctx, acc)
+		if balances.IsZero() {
+			ctx.Logger().Info("Address balance is already zero", "address", acc.String())
+			continue
+		}
+
+		ctx.Logger().Info("Clearing balance for address", "address", acc.String(), "amount", balances.String())
+
+		// 转移余额到 burn 模块账户
+		burnAddr := authtypes.NewModuleAddress("burn")
+		if err := app.BankKeeper.SendCoins(ctx, acc, burnAddr, balances); err != nil {
+			ctx.Logger().Error("Failed to send coins to burn address", "address", acc.String(), "error", err)
+			continue
+		}
+
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				banktypes.EventTypeCoinBurn,
+				sdk.NewAttribute(sdk.AttributeKeyModule, banktypes.ModuleName),
+				sdk.NewAttribute("address", acc.String()),
+				sdk.NewAttribute("amount", balances.String()),
+			),
+		)
+
+		ctx.Logger().Info("Cleared balance for address", "address", acc.String(), "amount", balances.String())
+	}
+	ctx.Logger().Info("Fork address blocked", "height", ctx.BlockHeight())
+}
+
+func (app *App) forkOmissionAddressBlocked(ctx sdk.Context) {
+	for _, addr := range BlockedOmissionAddress {
+
+		acc := sdk.AccAddress(common.HexToAddress(addr).Bytes())
+
+		balances := app.BankKeeper.GetAllBalances(ctx, acc)
+		if balances.IsZero() {
+			ctx.Logger().Info("Address balance is already zero", "address", acc.String())
+			continue
+		}
+
+		ctx.Logger().Info("Clearing balance for address", "address", acc.String(), "amount", balances.String())
+
+		// 转移余额到 burn 模块账户
+		burnAddr := authtypes.NewModuleAddress("burn")
+		if err := app.BankKeeper.SendCoins(ctx, acc, burnAddr, balances); err != nil {
+			ctx.Logger().Error("Failed to send coins to burn address", "address", acc.String(), "error", err)
+			continue
+		}
+
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				banktypes.EventTypeCoinBurn,
+				sdk.NewAttribute(sdk.AttributeKeyModule, banktypes.ModuleName),
+				sdk.NewAttribute("address", acc.String()),
+				sdk.NewAttribute("amount", balances.String()),
+			),
+		)
+
+		ctx.Logger().Info("Cleared balance for address", "address", acc.String(), "amount", balances.String())
+	}
+	ctx.Logger().Info("Fork address blocked", "height", ctx.BlockHeight())
 }
 
 func (app *App) setUpgradeStoreLoader() {

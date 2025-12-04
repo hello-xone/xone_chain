@@ -7,6 +7,7 @@ COMMIT_ID=`git rev-parse --short HEAD`
 TAG_ID=`git describe --tags --abbrev=0`
 DOCKER := $(shell which docker)
 
+# sudo apt-get install -y librocksdb-dev libsnappy-dev liblz4-dev libzstd-dev libbz2-dev zlib1g-dev
 build-rocksdb:
 	CGO_ENABLED=1 \
 	CGO_CFLAGS="-I/usr/include" \
